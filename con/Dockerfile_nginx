@@ -1,0 +1,18 @@
+FROM nginx:alpine
+
+USER root
+
+COPY ./config/nginx/app.conf /etc/nginx/conf.d/default.conf
+COPY ./config/nginx/nginx.conf /etc/nginx/nginx.conf
+
+RUN mkdir /etc/nginx/sites-available
+
+COPY ./config/nginx/con.conf /etc/nginx/sites-available/con.localhost/con.localhost.conf
+COPY ./config/nginx/mon.conf /etc/nginx/sites-available/mon.localhost/mon.localhost.conf
+
+RUN mkdir /etc/nginx/sites-enabled
+
+RUN ln -s /etc/nginx/sites-available/con.localhost/con.localhost.conf /etc/nginx/sites-enabled/con.localhost.conf
+RUN ln -s /etc/nginx/sites-available/mon.localhost/mon.localhost.conf /etc/nginx/sites-enabled/mon.localhost.conf
+
+# COPY ./hosts /etc/hosts

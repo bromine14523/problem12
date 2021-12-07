@@ -1,0 +1,30 @@
+version: "3.7"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: con_mon
+    container_name: con_mon_bundle
+    restart: unless-stopped
+    volumes:
+      - ./:/var/www/con.localhost
+      - ./../mon/:/var/www/mon.localhost
+  
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile_nginx
+    image: nginx
+    container_name: server
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes: 
+      - ./:/var/www/con.localhost
+      - ./../mon/:/var/www/mon.localhost
+    depends_on:
+      - app
+
+
